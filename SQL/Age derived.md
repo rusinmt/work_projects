@@ -1,6 +1,6 @@
 ## Age from Universal Electronic Population Register System
 
-AS a part of analysis I have come up with a PostgreSQl code for deriving persons age from his Universal Electronic Population Register System number.
+As part of an analysis, I have developed a PostgreSQL CTE to derive a person’s age from their Universal Electronic Population Register System (PESEL) number.
 
 ```sql
 select
@@ -29,3 +29,4 @@ select
         END AS age
     from table
 ```
+The CTE is suitable for individuals born both before and after the year 2000, as it correctly handles the different date encoding schemes used for each century in the PESEL system.
