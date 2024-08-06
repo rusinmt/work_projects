@@ -22,4 +22,3 @@ SELECT
     '</tbody>' ||
     '</table>'
 FROM base
-'''
