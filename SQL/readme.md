@@ -23,4 +23,4 @@ SELECT
     '</table>'
 FROM base
 ```
-![table]("D:\portfolio\date\git\table.jpg")
+![table](D:\portfolio\date\git\table.jpg)
