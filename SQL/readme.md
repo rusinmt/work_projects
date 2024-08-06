@@ -24,5 +24,5 @@ SELECT
 FROM base
 ```
 <p align="center">
-    <img src="D:\portfolio\date\git\table.jpg">
+    <img src=D:\portfolio\date\git\table.jpg>
 </p>
