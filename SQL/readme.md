@@ -1,6 +1,6 @@
 ## E-mail template
 
-As a part of join effort of our team, to create automated template for a client, I have combined PostgreSQL with HTML to create an elegant and slick table that can be added to mass letter campains.
+As part of our team's collaborative effort to create an automated template for a client, I have combined PostgreSQL with HTML to generate an elegant and slick table that can be added to mass letter campaigns.
 
 ```sql
 SELECT
@@ -23,3 +23,4 @@ SELECT
     '</table>'
 FROM base
 ```
+![table]("D:\portfolio\date\git\table.jpg")
