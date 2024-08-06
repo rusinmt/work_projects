@@ -23,5 +23,6 @@ SELECT
     '</table>'
 FROM base
 ```
-
-![table](https://github.com/user-attachments/assets/ca5d2298-785f-4efb-8b61-d27accc48308)
+<p align="center">
+    <img src="[D:\portfolio\date\git\table.jpg](https://github.com/user-attachments/assets/ca5d2298-785f-4efb-8b61-d27accc48308)">
+</p>
