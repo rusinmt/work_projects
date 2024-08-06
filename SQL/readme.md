@@ -24,5 +24,5 @@ SELECT
 FROM base
 ```
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/ca5d2298-785f-4efb-8b61-d27accc48308 style="width: 70%;">
+    <img src="https://github.com/user-attachments/assets/ca5d2298-785f-4efb-8b61-d27accc48308" style="width: 70%;">
 </p>
