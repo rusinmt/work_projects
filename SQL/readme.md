@@ -2,7 +2,7 @@
 
 As a part of join effort of our team, to create automated template for a client, I have combined PostgreSQL with HTML to create an elegant and slick table that can be added to mass letter campains.
 
-sql'''
+```sql
 SELECT
     '<table style="font-family: ''Segoe UI'', Arial, sans-serif; border-collapse: separate; border-spacing: 0; margin: 20px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 8px; overflow: hidden;">' ||
     '<thead>' ||
@@ -22,3 +22,4 @@ SELECT
     '</tbody>' ||
     '</table>'
 FROM base
+```
