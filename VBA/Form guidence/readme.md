@@ -1,6 +1,6 @@
 ## Form guidence
 
-As part of a larger automation tool, I have developed a VBA subroutine to assist users in entering information accurately. 
+As part of a larger automation tool, I have developed a VBA code to assist users in entering information accurately. 
 ```vba
 Option Explicit
 
