@@ -27,6 +27,6 @@ select
                 end
             ELSE NULL
         END AS age
-    from table
+from table
 ```
 The CTE is suitable for individuals born both before and after the year 2000, as it correctly handles the different date encoding schemes used for each century in the PESEL system.
