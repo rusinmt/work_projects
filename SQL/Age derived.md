@@ -3,7 +3,7 @@
 As part of an analysis, I have developed a PostgreSQL CTE to derive a person’s age from their Universal Electronic Population Register System (PESEL) number.
 
 ```sql
-select
+SELECT
         CASE
             WHEN
                 substring(, 3, 2) ~ '^\d{2}$' AND
@@ -27,6 +27,6 @@ select
                 end
             ELSE NULL
         END AS age
-from table
+FROM table
 ```
 The CTE is suitable for individuals born both before and after the year 2000, as it correctly handles the different date encoding schemes used for each century in the PESEL system.
