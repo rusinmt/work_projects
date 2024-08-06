@@ -23,4 +23,6 @@ SELECT
     '</table>'
 FROM base
 ```
-![table](D:\portfolio\date\git\table.jpg)
+<p align="center">
+    <img src="D:\portfolio\date\git\table.jpg">
+</p>
