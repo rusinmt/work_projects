@@ -44,6 +44,43 @@ def api():
             client_config: ClientConfig = ClientConfig(
                 connect_timeout=3*60000,
                 read_timeout=3*60000,
+
+            )
+   
+            # Creates a PDF Services instance
+            pdf_services = PDFServices(
+                credentials=credentials,
+                client_config=client_config
+            )
+   
+            # Creates an asset(s) from source file(s) and upload
+            input_asset = pdf_services.upload(input_stream=input_stream,
+                                              mime_type=PDFServicesMediaType.PDF)
+   
+            ocr_pdf_params = OCRParams(
+                ocr_locale=OCRSupportedLocale.PL_PL,
+                ocr_type=OCRSupportedType.SEARCHABLE_IMAGE
+            )
+   
+            # Implementing PDF page split
+            split_pdf_params = SplitPDFParams(page_count=1)
+            split_pdf_job = SplitPDFJob(input_asset, split_pdf_params)
+            location = pdf_services.submit(split_pdf_job)
+            pdf_services_response = pdf_services.get_job_result(location, SplitPDFResult)
+            result_assets = pdf_services_response.get_result().get_assets()
+   
+            # Creates a new job instance
+            ocr_pdf_job = OCRPDFJob(input_asset=result_assets[0], ocr_pdf_params=ocr_pdf_params)
+   
+            # Submit the job and gets the job result
+            location = pdf_services.submit(ocr_pdf_job)
+            pdf_services_response = pdf_services.get_job_result(location, OCRPDFResult)
+   
+            # Get content from the resulting asset(s)
+            result_asset: CloudAsset = pdf_services_response.get_result().get_asset()
+            stream_asset: StreamAsset = pdf_services.get_content(result_asset)
+   
+            # Creates an output stream and copy stream asset's content to it
             new_path = os.path.join(ocr_path, os.path.basename(f))
             with open(new_path, "wb") as file:
                 file.write(stream_asset.get_input_stream())
