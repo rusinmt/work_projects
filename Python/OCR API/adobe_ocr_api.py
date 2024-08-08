@@ -44,7 +44,6 @@ def api():
             client_config: ClientConfig = ClientConfig(
                 connect_timeout=3*60000,
                 read_timeout=3*60000,
-
             )
    
             # Creates a PDF Services instance
