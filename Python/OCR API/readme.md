@@ -12,4 +12,4 @@ This project helps automate the process of performing OCR on scanned documents. 
                 client_config=client_config
             )
 ```
-In the function, I am looking for an ID number and a title in the newly created text-based PDF of the first page of the original document. The logic is implemented to find capitalized text containing more than two words, excluding rows of text that could be a name and surname or numbers to filter out addresses. Additionally, I included logic to handle files with the same name by appending a suffix index to ensure uniqueness.
+In the next function, I am looking for an ID number and a title in the newly created text-based PDF of the first page of the original document. The logic is implemented to find capitalized text containing more than two words, excluding rows of text that could be a name and surname or numbers to filter out addresses. Additionally, I included logic to handle files with the same name by appending a suffix index to ensure uniqueness.
