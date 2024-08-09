@@ -112,12 +112,12 @@ def rename():
                 new_filename = f"{ref}_{line}.pdf"
                 old_path = os.path.join(input_path, filename)
                 new_path = os.path.join(input_path, new_filename)
-                if filename in os.listdir(input_path):
+                if os.path.exists(new_path):
                     i = 1
                     while os.path.exists(os.path.join(input_path, f"{ref}_{line}_{i}.pdf")):
                         i += 1
-                    new_filename = f"{ref}_{line}_{i}.pdf"
-                os.rename(old_path, new_path)
+                    new_path = os.path.join(input_path, f"{ref}_{line}_{i}.pdf")
+                os.rename(old_path, new_path)    
                 file.close()
                 os.remove(file_path)
 def main():                  
