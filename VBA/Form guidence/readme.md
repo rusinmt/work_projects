@@ -29,4 +29,4 @@ Private Sub FormatCell(ByVal Target As Range)
     Target.Font.Color = &H808080
 End Sub
 ```
-This subroutine automatically populates cells with placeholder when they are left empty.
+This subroutine automatically populates cells with placeholders when they are left empty, featuring a mechanism to clear the cell upon double-click.
