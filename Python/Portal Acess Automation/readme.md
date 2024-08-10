@@ -1,4 +1,4 @@
-##Web Portal Automation
+## Web Portal Automation
 
 This script leverages Selenium WebDriver to automate interactions with a web portal, specifically designed for managing legal appeals in "Portal Informacyjny Sądów Powszechnych".
 
