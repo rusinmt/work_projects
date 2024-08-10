@@ -13,7 +13,7 @@ Analytics team can share multpiple reports in a form of Excel file exported via 
 
 VBA code is assigned to a button from Controls in the Developer tab.
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/b77adab6-a219-4bd3-bad2-5230f550c89e" style="width: 65%;">
+    <img src="https://github.com/user-attachments/assets/b77adab6-a219-4bd3-bad2-5230f550c89e" style="width: 35%;">
 </p>
 
 ![connect](https://github.com/user-attachments/assets/b77adab6-a219-4bd3-bad2-5230f550c89e)
