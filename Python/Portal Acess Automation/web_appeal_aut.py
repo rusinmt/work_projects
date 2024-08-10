@@ -63,7 +63,7 @@ def clicker():
     else:
         pass
  
-#CRAWLER
+#login
 login(username, password)
  
 #close popup
@@ -74,7 +74,7 @@ else:
  
 driver.get('https://portal.wroclaw.sa.gov.pl/#/mojprofil/subkonta')
  
-#pierwsza apelacja
+#first appeal
 click(driver, (By.XPATH, "//button[@class='btn btn-info ng-star-inserted']")) ##menu apelacji
 filtry()
 driver.implicitly_wait(1)
