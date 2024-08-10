@@ -7,6 +7,8 @@ Function OpenScript() As String
     Dim concatText As String
     Dim i As Long
     Dim cell As Range
+    Dim DataRange As Range
+    Dim tbl As ListObject
     
     Set dialog = Application.FileDialog(msoFileDialogFilePicker)
     dialog.Title = "Select an Excel File"
@@ -17,8 +19,14 @@ Function OpenScript() As String
         filePath = dialog.SelectedItems(1)
         Set selectedWorkbook = Workbooks.Open(filePath, ReadOnly:=True)
         
-        If WorksheetExists(selectedWorkbook, "script") Then
-            Set ws = selectedWorkbook.Sheets("script")
+        On Error Resume Next
+        Set ws = selectedWorkbook.Sheets("script")
+        On Error GoTo 0
+        
+        If ws Is Nothing Then
+            MsgBox "Please make sure the selected file contains a 'script' sheet or rename existing one.", vbExclamation
+            concatText = ""
+        Else
             lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
             concatText = ""
         
@@ -29,9 +37,6 @@ Function OpenScript() As String
                 End If
             Next i
             concatText = Trim(concatText)
-        Else
-            MsgBox "The selected workbook does not contain a 'script'", vbExclamation
-            concatText = ""
         End If
         
         selectedWorkbook.Close SaveChanges:=False
@@ -42,13 +47,7 @@ Function OpenScript() As String
     End If
     Set dialog = Nothing
 End Function
-Function WorksheetExists(wb As Workbook, sheetName As String) As Boolean
-    Dim ws As Worksheet
-    On Error Resume Next
-    Set ws = wb.Sheets(sheetName)
-    On Error GoTo 0
-    WorksheetExists = Not ws Is Nothing
-End Function
+
 Sub DBconnect()
     Dim conn As ADODB.Connection
     Dim rs As ADODB.Recordset
