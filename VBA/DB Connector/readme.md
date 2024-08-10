@@ -16,7 +16,7 @@ VBA code is assigned to a button from Controls in the Developer tab.
     <img src="https://github.com/user-attachments/assets/b77adab6-a219-4bd3-bad2-5230f550c89e" style="width: 35%;">
 </p>
 
-I have enabled the Microsoft ActiveX Data Library with the MSDASQL provider, which acts as a bridge between OLE DB and ODBC.
+I have enabled the Microsoft ActiveX Data Objects with the MSDASQL provider, which acts as a bridge between OLE DB and ODBC.
 <p align="center">
-    <img src="https://github.com/user-attachments/assets/255d0912-4f0e-4c4e-b474-4338a56fc60d" style="width: 35%;">
+    <img src="https://github.com/user-attachments/assets/255d0912-4f0e-4c4e-b474-4338a56fc60d" style="width: 50%;">
 </p>
