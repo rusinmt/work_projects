@@ -12,4 +12,6 @@ Set dialog = Application.FileDialog(msoFileDialogFilePicker)
 Analytics team can share multpiple reports in a form of Excel file exported via DataGrip with automaticly created 'script' worksheet.
 
 VBA code is assigned to a button from Controls in the Developer tab.
-![tut](https://github.com/user-attachments/assets/35f2a9ec-86ac-460f-822f-89ffc2afdbc2)
+<p align="center">
+    <img src="[https://github.com/user-attachments/assets/ca5d2298-785f-4efb-8b61-d27accc48308](https://github.com/user-attachments/assets/35f2a9ec-86ac-460f-822f-89ffc2afdbc2)" style="width: 35%;">
+</p>
