@@ -23,4 +23,4 @@ This automated ETL process significantly streamlines extracting court delivery d
                             file_path = os.path.join(pdf_path, file_name)
                             os.rename(og, file_path)
 ```
-The data engineering work in this script highlights a comprehensive skill set in web automation, data extraction, and ETL pipeline design. It also exhibits expertise in handling various file formats, including XLS, CSV, PDF, and HTML, showcasing the ability to work with both structured and unstructured data. The entire process is structured as an efficient ETL pipeline, indicating a solid understanding of data workflow design principles.
+The data engineering work in this script highlights a comprehensive skill set in web automation, data extraction, and ETL pipeline design.<br> It also exhibits expertise in handling various file formats, including XLS, CSV, PDF, and HTML, showcasing the ability to work with both structured and unstructured data. The entire process is structured as an efficient ETL pipeline, indicating a solid understanding of data workflow design principles.
