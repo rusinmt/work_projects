@@ -9,4 +9,18 @@ options.add_experimental_option("prefs", {
 ```
 Enabling experimental options in Chrome allowed for retrieving PDF documents without the necessity of accessing multiple levels of shadow DOM in the web page code.
 
-This automated ETL process significantly streamlines extracting court delivery data and retrieving associated documents in a single execution. The end product is a PDF files archive that will be added to the company's internal application storage and will be accessed by users. The code skips downloading files with the same title to avoid producing duplicated data in the dedicated storage. The  The data engineering work in this script highlights a comprehensive skill set in web automation, data extraction, and ETL pipeline design. It also exhibits expertise in handling various file formats, including XLS, CSV, PDF, and HTML, showcasing the ability to work with both structured and unstructured data. The entire process is structured as an efficient ETL pipeline, indicating a solid understanding of data workflow design principles.
+This automated ETL process significantly streamlines extracting court delivery data and retrieving associated documents in a single execution. The end product is a PDF files archive that will be added to the company's internal application storage and will be accessed by users.<br>The code skips downloading files with the same title to avoid producing duplicated data in the dedicated storage. 
+```python
+ files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
+                    for f in files:
+                        i = 0
+                        og = os.path.join(pdf_path, f)
+                        try:
+                            os.rename(og, file_path)
+                        except FileExistsError:
+                            i += 1
+                            file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
+                            file_path = os.path.join(pdf_path, file_name)
+                            os.rename(og, file_path)
+```
+The data engineering work in this script highlights a comprehensive skill set in web automation, data extraction, and ETL pipeline design. It also exhibits expertise in handling various file formats, including XLS, CSV, PDF, and HTML, showcasing the ability to work with both structured and unstructured data. The entire process is structured as an efficient ETL pipeline, indicating a solid understanding of data workflow design principles.
