@@ -216,7 +216,7 @@ def etl():
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
                             file_path = os.path.join(pdf_path, file_name)
                             os.rename(og, file_path)
-                            existing_files.append(file_name)
+                            existing_name.add(file_name)
     driver.quit()
     print('ETL process completed!')
 
