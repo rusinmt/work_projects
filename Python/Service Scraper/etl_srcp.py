@@ -211,19 +211,8 @@ def etl():
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
                             file_path = os.path.join(pdf_path, file_name)
                             os.rename(og, file_path)
-                            
-                except ElementClickInterceptedException:
-                    time.sleep(20)
-                    click(driver, (By.XPATH, button_xpath))
-                    time.sleep(2)
-                    files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
-                    for f in files:
-                        og = os.path.join(pdf_path, f)
-                        os.rename(og, file_path)
-                        existing_files.append(file_name)
-
     driver.quit()
-    print('ETL process completed successfully!')
+    print('ETL process completed!')
 
 if __name__ == "__main__":
     etl()
