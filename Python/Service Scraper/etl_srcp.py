@@ -143,6 +143,7 @@ def etl():
 
     # Download PDFs
     existing_files = [file for file in os.listdir(pdf_path) if file.endswith('.pdf')]
+    existing_name = set(os.listdir(pdf_path))
     df = final_df.drop_duplicates(subset=['REFERENCE']).reset_index(drop=True)
     time.sleep(1)
 
@@ -192,8 +193,11 @@ def etl():
                 ref = ref[:-2] + "_" + ref[-2:]
             file_name = f"{ref} - {sygnatura} - {opis}.pdf"
             file_path = os.path.join(pdf_path, file_name)
+            
+            if f'{file_name}.pdf' in existing_name:
+                continue
         
-            if input_button and 'name' in input_button.attrs:
+            elif input_button and 'name' in input_button.attrs:
                 button_name = input_button['name']
                 button_xpath = f"//input[@name='{button_name}']"
                 try:
@@ -206,13 +210,16 @@ def etl():
                         og = os.path.join(pdf_path, f)
                         try:
                             os.rename(og, file_path)
+                            existing_name.add(file_name)
                         except FileExistsError:
                             i += 1
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
                             file_path = os.path.join(pdf_path, file_name)
                             os.rename(og, file_path)
+                            existing_files.append(file_name)
     driver.quit()
     print('ETL process completed!')
+
 
 if __name__ == "__main__":
     etl()
