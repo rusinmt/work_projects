@@ -84,6 +84,7 @@ def ref_ext(text):
 def etl():
     # Login
     driver.get("https://www.e-sad.gov.pl/")
+    print("Logging...")
     login(username, password)
     dismiss_alert()
 
@@ -92,7 +93,7 @@ def etl():
     dismiss_alert()
     time.sleep(3)
 
-    # Set date range
+    # Set date range     
     current_date = datetime.datetime.now() - datetime.timedelta(days=7)
     week = current_date.strftime('%Y-%m-%d')
     send(driver, (By.ID, "ctl00_ContentPlaceHolder1_txtDataOd"), week)
@@ -102,10 +103,15 @@ def etl():
     send(driver, (By.ID, "ctl00_ContentPlaceHolder1_txtDataDo"), d2d)
     time.sleep(1)
     click(driver, (By.ID, "FiltrujButton"))
-    time.sleep(2)
-
+    time.sleep(2)    
+        
     # Extract data for each option
-    select_element = find(driver, (By.ID, "ctl00_ContentPlaceHolder1_dlZakresDanych"))
+    try:
+        select_element = find(driver, (By.ID, "ctl00_ContentPlaceHolder1_dlZakresDanych"))
+    except TimeoutException:
+        print(f"No data. End.")
+        driver.quit()
+        
     options = select_element.find_elements(By.TAG_NAME, "option")
     dfs = []
 
@@ -113,20 +119,20 @@ def etl():
         option_value = option.get_attribute("value")
         Select(select_element).select_by_value(option_value)
         print(f'{option_value}')
-        
         click(driver, (By.ID, "ctl00_ContentPlaceHolder1_btnEksportuj"))
         time.sleep(2)
         select_element.click()  
         select_element.send_keys(Keys.ARROW_DOWN)
         select_element.send_keys(Keys.RETURN)
         time.sleep(2)
-
+    
     # Append
-    xls_files = [file for file in os.listdir(downloads_path) if file.startswith("Doreczenia") and file.endswith(".xls")]
-    append_files = sorted(xls_files, key=lambda x: os.path.getmtime(os.path.join(downloads_path, x)), reverse=True)[:len(options)]
+    downloads_path = r"C:\Users\Mateusz\Downloads"
+    xls_files = [file for file in os.listdir(pdf_path) if file.startswith("Doreczenia") and file.endswith(".xls")]
+    append_files = sorted(xls_files, key=lambda x: os.path.getmtime(os.path.join(pdf_path, x)), reverse=True)[:len(options)]
 
     for xls_file in append_files:
-        xls_file_path = os.path.join(downloads_path, xls_file)
+        xls_file_path = os.path.join(pdf_path, xls_file)
         html = pd.read_html(xls_file_path)
         df = html[0]
         print(f'Shape of DF from file', xls_file,':', df.shape)
@@ -176,7 +182,6 @@ def etl():
         try:
             wait.until(lambda x: get(x) != syg_0)
         except TimeoutException:
-            time.sleep(20)
             continue
 
         soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -192,34 +197,33 @@ def etl():
             if len(ref) > 9:
                 ref = ref[:-2] + "_" + ref[-2:]
             file_name = f"{ref} - {sygnatura} - {opis}.pdf"
-            file_path = os.path.join(pdf_path, file_name)
             
-            if f'{file_name}.pdf' in existing_name:
+            if file_name in existing_name:
+                print(f"Skipping file: {file_name}")
                 continue
-        
-            elif input_button and 'name' in input_button.attrs:
+            
+            if input_button and 'name' in input_button.attrs:
                 button_name = input_button['name']
                 button_xpath = f"//input[@name='{button_name}']"
-                try:
-                    time.sleep(2)
-                    click(driver, (By.XPATH, button_xpath))
-                    time.sleep(2)
-                    files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
-                    for f in files:
-                        i = 0
-                        og = os.path.join(pdf_path, f)
+                time.sleep(2)
+                click(driver, (By.XPATH, button_xpath))
+                time.sleep(2)
+                files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
+                
+                if files:
+                    og = os.path.join(pdf_path, files[0])
+                    file_path = os.path.join(pdf_path, file_name)
+                    i = 0
+                    while True:
                         try:
                             os.rename(og, file_path)
                             existing_name.add(file_name)
+                            break
                         except FileExistsError:
                             i += 1
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
-                            file_path = os.path.join(pdf_path, file_name)
-                            os.rename(og, file_path)
-                            existing_name.add(file_name)
     driver.quit()
     print('ETL process completed!')
-
 
 if __name__ == "__main__":
     etl()
