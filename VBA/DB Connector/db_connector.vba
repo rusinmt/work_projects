@@ -61,10 +61,13 @@ Sub DBconnect()
         "Server= * " & _
         "Database= * ;" & _
         "UID= * ;" & _
-        "PWD= * ;"
+        "PWD= * ;" & _ 
+        "ConnectionTimeout=300;" & _ 
+        "CommandTimeout=300" ' Expanding connection and query timeout for executing more complex queries.
         
     Set conn = New ADODB.Connection
     conn.Open connectionString
+    conn.CommandTimeout = 300
     concatText = OpenScript()
     
     If concatText <> "" Then
