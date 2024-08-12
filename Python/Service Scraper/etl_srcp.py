@@ -109,6 +109,7 @@ def etl():
     except TimeoutException:
         print(f"No data. End.")
         driver.quit()
+        return False
         
     # Extract data for each option     
     options = select_element.find_elements(By.TAG_NAME, "option")
