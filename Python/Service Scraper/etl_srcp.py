@@ -74,13 +74,6 @@ def get(driver):
         return sygnatura_td.get_text(strip=True)
     return None
 
-def ref_ext(text):
-    match = re.search(r'RCV(\d{11})', text)
-    if match:
-        return match.group(1)
-    return None
-
-
 def etl():
     # Login
     driver.get("https://www.e-sad.gov.pl/")
