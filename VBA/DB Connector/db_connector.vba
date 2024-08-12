@@ -112,7 +112,7 @@ Sub Refresh()
     queryText = targetSheet.Range("A1").Value
     
     If queryText = "" Then
-        MsgBox "Extablish connection first, select 'Po³¹cz'.", vbInformation
+        MsgBox "Extablish connection first, select 'Connect'.", vbInformation
         Exit Sub
     End If
 
