@@ -144,7 +144,9 @@ def etl():
     existing_name = set(os.listdir(pdf_path))
     df = final_df.drop_duplicates(subset=['REFERENCE']).reset_index(drop=True)
     time.sleep(1)
-
+    
+    driver.get("https://www.e-sad.gov.pl/uzytkownik/mojeDoreczenia.aspx")
+    dismiss_alert()
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     span = soup.find('span', class_='form_check')
     checkbox = span.find('input', id='ctl00_ContentPlaceHolder1_chkFiltrPoDacie')
@@ -191,7 +193,6 @@ def etl():
             file_name = f"{ref} - {sygnatura} - {opis}.pdf"
             
             if file_name in existing_name:
-                print(f"Skipping file: {file_name}")
                 continue
             
             if input_button and 'name' in input_button.attrs:
