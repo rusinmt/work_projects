@@ -69,12 +69,17 @@ Sub DBconnect()
     conn.Open connectionString
     conn.CommandTimeout = 300
     concatText = OpenScript()
+    Set targetSheet = ThisWorkbook.Sheets("db_update")
+    Set targetSheet = ThisWorkbook.Sheets("db_update")
+        With targetSheet.Range("A1")
+            .Value = concatText
+            .Font.Color = RGB(255, 255, 255)
+        End With
     
     If concatText <> "" Then
         Set rs = conn.Execute(concatText)
-        Set targetSheet = ThisWorkbook.Sheets("db_update")
-        targetSheet.Cells.Clear
-        
+        targetSheet.Rows("2:" & targetSheet.Rows.Count).Clear
+    
         For i = 0 To rs.Fields.Count - 1
             targetSheet.Cells(6, i + 1).Value = rs.Fields(i).Name
         Next i
@@ -90,7 +95,60 @@ Sub DBconnect()
         Set conn = Nothing
         
         MsgBox "Data updated successfully!", vbInformation
-    Else
-        MsgBox "No data to process", vbExclamation
     End If
+End Sub
+
+Sub Refresh()
+    Dim conn As ADODB.Connection
+    Dim rs As ADODB.Recordset
+    Dim connectionString As String
+    Dim i As Long
+    Dim targetSheet As Worksheet
+    Dim DataRange As Range
+    Dim tbl As ListObject
+    Dim queryText As String
+    
+    Set targetSheet = ThisWorkbook.Sheets("db_update")
+    queryText = targetSheet.Range("A1").Value
+    
+    If queryText = "" Then
+        MsgBox "Extablish connection first, select 'Po³¹cz'.", vbInformation
+        Exit Sub
+    End If
+
+    connectionString = "Provider=MSDASQL;" & _
+        "Driver={PostgreSQL Unicode};" & _
+        "Server= * " & _
+        "Database= * ;" & _
+        "UID= * ;" & _
+        "PWD= * ;" & _ 
+        "ConnectionTimeout=300;" & _ 
+        "CommandTimeout=300"
+
+    Set conn = New ADODB.Connection
+    conn.Open connectionString
+    conn.CommandTimeout = 300
+    
+    Set rs = conn.Execute(queryText)
+    targetSheet.Rows("2:" & targetSheet.Rows.Count).Clear
+    For i = 0 To rs.Fields.Count - 1
+        targetSheet.Cells(6, i + 1).Value = rs.Fields(i).Name
+    Next i
+    targetSheet.Range("A7").CopyFromRecordset rs
+    
+    On Error Resume Next
+    targetSheet.ListObjects(1).Unlist
+    On Error GoTo 0
+    
+    Set DataRange = targetSheet.Range("A6").CurrentRegion
+    Set tbl = targetSheet.ListObjects.Add(xlSrcRange, DataRange, , xlYes)
+    tbl.TableStyle = "TableStyleLight1"
+    targetSheet.UsedRange.Columns.AutoFit
+    
+    rs.Close
+    conn.Close
+    Set rs = Nothing
+    Set conn = Nothing
+    
+    MsgBox "Data updated successfully!", vbInformation
 End Sub
