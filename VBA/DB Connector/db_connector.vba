@@ -63,7 +63,7 @@ Sub DBconnect()
         "UID= * ;" & _
         "PWD= * ;" & _ 
         "ConnectionTimeout=300;" & _ 
-        "CommandTimeout=300" ' Expanding connection and query timeout for executing more complex queries.
+        "CommandTimeout=300" ' Extending connection and query timeout for executing more complex queries.
         
     Set conn = New ADODB.Connection
     conn.Open connectionString
