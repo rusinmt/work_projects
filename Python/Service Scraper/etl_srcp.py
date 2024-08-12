@@ -103,18 +103,16 @@ def etl():
     send(driver, (By.ID, "ctl00_ContentPlaceHolder1_txtDataDo"), d2d)
     time.sleep(1)
     click(driver, (By.ID, "FiltrujButton"))
-    time.sleep(2)    
-        
-    # Extract data for each option
+    time.sleep(2)
     try:
         select_element = find(driver, (By.ID, "ctl00_ContentPlaceHolder1_dlZakresDanych"))
     except TimeoutException:
         print(f"No data. End.")
         driver.quit()
         
+    # Extract data for each option     
     options = select_element.find_elements(By.TAG_NAME, "option")
     dfs = []
-
     for option in options:
         option_value = option.get_attribute("value")
         Select(select_element).select_by_value(option_value)
