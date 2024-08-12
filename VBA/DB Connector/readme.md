@@ -19,4 +19,4 @@ I have enabled the Microsoft ActiveX Data Objects with the MSDASQL provider, whi
 <p align="center">
     <img src="https://github.com/user-attachments/assets/255d0912-4f0e-4c4e-b474-4338a56fc60d" style="width: 50%;">
 </p>
-The query results with headers are inserted, just below the trigger button, after cleaning the worksheet cells ensuring up to date values on read.
+The query results with headers are inserted just below the trigger button, after cleaning the worksheet cells to ensure up-to-date values on read. The code enables users to refresh the connected script with an additional Refresh button that uses the extracted query, cached in an unused cell of the workbook, in a similar fashion to the DBConnect procedure.
