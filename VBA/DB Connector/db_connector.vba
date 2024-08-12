@@ -82,7 +82,8 @@ Sub DBconnect()
         Set DataRange = targetSheet.Range("A6").CurrentRegion
         Set tbl = targetSheet.ListObjects.Add(xlSrcRange, DataRange, , xlYes)
         tbl.TableStyle = "TableStyleLight1"
-        
+        targetSheet.UsedRange.Columns.AutoFit
+
         rs.Close
         conn.Close
         Set rs = Nothing
