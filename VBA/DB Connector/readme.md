@@ -28,11 +28,11 @@ The query results with headers are inserted into the newly created "output" shee
 Some key fetaures:<br>
     - SQL queries can be extracted from Excel files from default DataGrip exports and files created internally from other sources named "script"<br>
     - OpenScript() returns lines that were not commented out:<br>
-        ```sql
-        If Not Trim(cell.Value) Like "--*" Then
-            concatText = concatText & Trim(cell.Value) & " "
-        End If
-        ```
+```sql
+If Not Trim(cell.Value) Like "--*" Then
+    concatText = concatText & Trim(cell.Value) & " "
+End If
+```
     - There are many exceptions informing the user about the execution of the program<br>
     - Extended connection and command timeouts were established for the Connection string:<br>
 ```sql
@@ -40,11 +40,11 @@ Some key fetaures:<br>
 "CommandTimeout=300"
 ```
     - Newly created result sheet is moved to the right of the db_connect sheet:<br>
-        ```sql
-        tableSheet.Move After:=ThisWorkbook.Sheets("db_update")
-        ```
+```sql
+tableSheet.Move After:=ThisWorkbook.Sheets("db_update")
+```
     - The "output" table is formatted and autofitted for better readability:<br>
-        ```sql
-        tbl.TableStyle = "TableStyleLight1"
-        tableSheet.UsedRange.Columns.AutoFit
-        ```
+```sql
+tbl.TableStyle = "TableStyleLight1"
+tableSheet.UsedRange.Columns.AutoFit
+```
