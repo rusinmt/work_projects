@@ -1,6 +1,6 @@
 ## Automate Database Updates with Excel VBA
 
-I have developed a VBA solution that offers a seamless way to connect to a PostgreSQL database and retrieve data with minimal effort.<br> A universal tool for managment without the use of any tool for querying. This provides up to date reads and combined with potential of ad hoc analysis and visuals of Excel workbook.
+I have developed a VBA solution that offers a seamless way to connect to a PostgreSQL database and retrieve data with minimal effort.<br> A universal tool for managment without the use of any tool for querying. This provides up to date reads combined with potential of ad hoc analysis of Excel workbook.
 
 Firstly, the process requires the user to log in to the database within the created UserForm1 object by executing the dc_UserForm.vba procedures called upon in the ShowLoginForm() function from the main script.
 <p align="center">
