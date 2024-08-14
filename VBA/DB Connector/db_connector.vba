@@ -1,3 +1,24 @@
+Public UserName As String
+Public Password As String
+
+Function ShowLoginForm() As Boolean
+    Dim frmLogin As UserForm1
+    Set frmLogin = New UserForm1
+    frmLogin.Show
+    
+    If frmLogin.Cancelled Then
+        MsgBox "Canceled.", vbInformation
+        ShowLoginForm = False
+    Else
+        UserName = frmLogin.UserName
+        Password = frmLogin.Password
+        ShowLoginForm = True
+    End If
+    
+    Unload frmLogin
+    Set frmLogin = Nothing
+End Function
+
 Function OpenScript() As String
     Dim filePath As String
     Dim selectedWorkbook As Workbook
@@ -22,9 +43,15 @@ Function OpenScript() As String
         On Error Resume Next
         Set ws = selectedWorkbook.Sheets("script")
         On Error GoTo 0
+   
+        If ws Is Nothing Then
+            On Error Resume Next
+            Set ws = selectedWorkbook.Sheets("Query")
+            On Error GoTo 0
+        End If
         
         If ws Is Nothing Then
-            MsgBox "Please make sure the selected file contains a 'script' sheet or rename existing one.", vbExclamation
+            MsgBox "Please make sure the selected file contains a 'script' or 'Query' sheet or rename existing one.", vbExclamation
             concatText = ""
         Else
             lastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
@@ -33,7 +60,9 @@ Function OpenScript() As String
             For i = 1 To lastRow
                 Set cell = ws.Cells(i, 1)
                 If Application.WorksheetFunction.IsText(cell.Value) Then
-                    concatText = concatText & cell.Value & " "
+                    If Not Trim(cell.Value) Like "--*" Then
+                        concatText = concatText & Trim(cell.Value) & " "
+                    End If
                 End If
             Next i
             concatText = Trim(concatText)
@@ -53,17 +82,27 @@ Sub DBconnect()
     Dim rs As ADODB.Recordset
     Dim connectionString As String
     Dim concatText As String
+    Dim DataRange As Range
+    Dim tbl As ListObject
     Dim i As Long
     Dim targetSheet As Worksheet
+    Dim tableSheet As Worksheet
+    
+    If UserName = "" Or Password = "" Then
+        If Not ShowLoginForm() Then
+            MsgBox "Login cancelled. Cannot connect to the database.", vbExclamation
+            Exit Sub
+        End If
+    End If
   
     connectionString = "Provider=MSDASQL;" & _
         "Driver={PostgreSQL Unicode};" & _
-        "Server= * " & _
-        "Database= * ;" & _
-        "UID= * ;" & _
-        "PWD= * ;" & _ 
-        "ConnectionTimeout=300;" & _ 
-        "CommandTimeout=300" ' Extending connection and query timeout for executing more complex queries.
+        "Server= server;" & _
+        "Database= db;" & _
+        "UID=" & UserName & ";" & _
+        "PWD=" & Password & ";" & _
+        "ConnectionTimeout=300;" & _
+        "CommandTimeout=300"
         
     Set conn = New ADODB.Connection
     conn.Open connectionString
@@ -71,30 +110,43 @@ Sub DBconnect()
     concatText = OpenScript()
     Set targetSheet = ThisWorkbook.Sheets("db_update")
     Set targetSheet = ThisWorkbook.Sheets("db_update")
-        With targetSheet.Range("A1")
+        With targetSheet.Range("A6")
             .Value = concatText
             .Font.Color = RGB(255, 255, 255)
+            .WrapText = False
+            .RowHeight = targetSheet.StandardHeight
         End With
     
     If concatText <> "" Then
         Set rs = conn.Execute(concatText)
-        targetSheet.Rows("2:" & targetSheet.Rows.Count).Clear
+        On Error Resume Next
+        Set tableSheet = ThisWorkbook.Worksheets("output")
+        On Error GoTo 0
+        
+        If tableSheet Is Nothing Then
+            Set tableSheet = ThisWorkbook.Worksheets.Add
+            tableSheet.Name = "output"
+            tableSheet.Move After:=ThisWorkbook.Sheets("db_update")
+        Else
+            tableSheet.Cells.Clear
+        End If
+        tableSheet.Activate
     
         For i = 0 To rs.Fields.Count - 1
-            targetSheet.Cells(6, i + 1).Value = rs.Fields(i).Name
+            tableSheet.Cells(1, i + 1).Value = rs.Fields(i).Name
         Next i
-        targetSheet.Range("A7").CopyFromRecordset rs
-        Set DataRange = targetSheet.Range("A6").CurrentRegion
-        Set tbl = targetSheet.ListObjects.Add(xlSrcRange, DataRange, , xlYes)
+        tableSheet.Range("A2").CopyFromRecordset rs
+        Set DataRange = tableSheet.Range("A1").CurrentRegion
+        Set tbl = tableSheet.ListObjects.Add(xlSrcRange, DataRange, , xlYes)
         tbl.TableStyle = "TableStyleLight1"
-        targetSheet.UsedRange.Columns.AutoFit
+        tableSheet.UsedRange.Columns.AutoFit
 
         rs.Close
         conn.Close
         Set rs = Nothing
         Set conn = Nothing
         
-        MsgBox "Data updated successfully!", vbInformation
+        MsgBox "Data inserted successfully!", vbInformation
     End If
 End Sub
 
@@ -104,46 +156,49 @@ Sub Refresh()
     Dim connectionString As String
     Dim i As Long
     Dim targetSheet As Worksheet
+    Dim tableSheet As Worksheet
     Dim DataRange As Range
     Dim tbl As ListObject
     Dim queryText As String
     
     Set targetSheet = ThisWorkbook.Sheets("db_update")
-    queryText = targetSheet.Range("A1").Value
+    queryText = targetSheet.Range("A6").Value
     
     If queryText = "" Then
-        MsgBox "Extablish connection first, select 'Connect'.", vbInformation
+        MsgBox "Extablish connection first, select 'Po³¹cz'.", vbInformation
         Exit Sub
     End If
 
     connectionString = "Provider=MSDASQL;" & _
         "Driver={PostgreSQL Unicode};" & _
-        "Server= * " & _
-        "Database= * ;" & _
-        "UID= * ;" & _
-        "PWD= * ;" & _ 
-        "ConnectionTimeout=300;" & _ 
+        "Server= server;" & _
+        "Database= db;" & _
+        "UID=" & UserName & ";" & _
+        "PWD=" & Password & ";" & _
+        "ConnectionTimeout=300;" & _
         "CommandTimeout=300"
 
     Set conn = New ADODB.Connection
     conn.Open connectionString
     conn.CommandTimeout = 300
     
+    Set tableSheet = ThisWorkbook.Sheets("output")
     Set rs = conn.Execute(queryText)
-    targetSheet.Rows("2:" & targetSheet.Rows.Count).Clear
+    tableSheet.Cells.Clear
     For i = 0 To rs.Fields.Count - 1
-        targetSheet.Cells(6, i + 1).Value = rs.Fields(i).Name
+        tableSheet.Cells(1, i + 1).Value = rs.Fields(i).Name
     Next i
-    targetSheet.Range("A7").CopyFromRecordset rs
+    tableSheet.Range("A2").CopyFromRecordset rs
     
     On Error Resume Next
-    targetSheet.ListObjects(1).Unlist
+    tableSheet.ListObjects(1).Unlist
     On Error GoTo 0
     
-    Set DataRange = targetSheet.Range("A6").CurrentRegion
-    Set tbl = targetSheet.ListObjects.Add(xlSrcRange, DataRange, , xlYes)
+    Set DataRange = tableSheet.Range("A1").CurrentRegion
+    Set tbl = tableSheet.ListObjects.Add(xlSrcRange, DataRange, , xlYes)
     tbl.TableStyle = "TableStyleLight1"
-    targetSheet.UsedRange.Columns.AutoFit
+    tableSheet.UsedRange.Columns.AutoFit
+    tableSheet.Activate
     
     rs.Close
     conn.Close
