@@ -35,10 +35,10 @@ Some key fetaures:<br>
         ```
     - There are many exceptions informing the user about the execution of the program<br>
     - Extended connection and command timeouts were established for the Connection string:<br>
-        ```sql
-        "ConnectionTimeout=300;" & _
-        "CommandTimeout=300"
-        ```
+```sql
+"ConnectionTimeout=300;" & _
+"CommandTimeout=300"
+```
     - Newly created result sheet is moved to the right of the db_connect sheet:<br>
         ```sql
         tableSheet.Move After:=ThisWorkbook.Sheets("db_update")
