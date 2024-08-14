@@ -26,24 +26,24 @@ I have enabled the Microsoft ActiveX Data Objects with the MSDASQL provider, whi
 The query results with headers are inserted into the newly created "output" sheet. The code cleans the worksheet cells beforehand when the connection is established for the second time, to ensure up-to-date values are read. The code enables users to refresh the connected script with an additional "Refresh" button that uses the extracted query, stored in an unused cell of the workbook, in a similar fashion to the DBConnect procedure.
 
 Some key fetaures:<br>
-    - SQL queries can be extracted from Excel files from default DataGrip exports and files created internally from other sources named "script"<br>
-    - OpenScript() returns lines that were not commented out:<br>
+- SQL queries can be extracted from Excel files from default DataGrip exports and files created internally from other sources named "script"<br>
+- OpenScript() returns lines that were not commented out:<br>
 ```vba
 If Not Trim(cell.Value) Like "--*" Then
     concatText = concatText & Trim(cell.Value) & " "
 End If
 ```
-    - There are many exceptions informing the user about the execution of the program<br>
-    - Extended connection and command timeouts were established for the Connection string:<br>
+- There are many exceptions informing the user about the execution of the program<br>
+- Extended connection and command timeouts were established for the Connection string:<br>
 ```sql
 "ConnectionTimeout=300;" & _
 "CommandTimeout=300"
 ```
-    - Newly created result sheet is moved to the right of the db_connect sheet:<br>
+- Newly created result sheet is moved to the right of the db_connect sheet:<br>
 ```vba
 tableSheet.Move After:=ThisWorkbook.Sheets("db_update")
 ```
-    - The "output" table is formatted and autofitted for better readability:<br>
+- The "output" table is formatted and autofitted for better readability:<br>
 ```vba
 tbl.TableStyle = "TableStyleLight1"
 tableSheet.UsedRange.Columns.AutoFit
