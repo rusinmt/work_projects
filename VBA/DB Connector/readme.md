@@ -26,8 +26,8 @@ I have enabled the Microsoft ActiveX Data Objects with the MSDASQL provider, whi
 The query results with headers are inserted into the newly created "output" sheet. The code cleans the worksheet cells beforehand when the connection is established for the second time, to ensure up-to-date values are read. The code enables users to refresh the connected script with an additional "Refresh" button that uses the extracted query, stored in an unused cell of the workbook, in a similar fashion to the DBConnect procedure.
 
 Some key fetaures:<br>
-    ###- SQL queries can be extracted from Excel files from default DataGrip exports and files created internally from other sources named "script"<br>
-    ###- OpenScript() returns lines that were not commented out:<br>
+    ### - SQL queries can be extracted from Excel files from default DataGrip exports and files created internally from other sources named "script"<br>
+    ### - OpenScript() returns lines that were not commented out:<br>
 ```vba
 If Not Trim(cell.Value) Like "--*" Then
     concatText = concatText & Trim(cell.Value) & " "
