@@ -86,5 +86,6 @@ for i in range(11):
     driver.implicitly_wait(1)
     clicker()
  
+driver.close()
 driver.quit()
 print('Ready!')
