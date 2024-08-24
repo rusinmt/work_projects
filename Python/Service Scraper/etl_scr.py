@@ -214,6 +214,7 @@ def etl():
                         except FileExistsError:
                             i += 1
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
+    driver.close()
     driver.quit()
     print('ETL process completed!')
 
