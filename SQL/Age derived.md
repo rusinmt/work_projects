@@ -1,4 +1,4 @@
-## Age from Universal Electronic Population Register System
+## Retriving age from Universal Electronic Population Register System
 
 As part of an analysis, I have developed a PostgreSQL CTE to derive a person's age from their Universal Electronic Population Register System (PESEL) number in the database.
 
