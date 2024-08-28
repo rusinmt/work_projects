@@ -191,29 +191,26 @@ def etl():
                 ref = ref[:-2] + "_" + ref[-2:]
             file_name = f"{ref} - {sygnatura} - {opis}.pdf"
             
-            if file_name in existing_name:
-                continue
-            
-            if input_button and 'name' in input_button.attrs:
+            if f'{file_name}.pdf' in existing_name:
+                continue        
+            elif input_button and 'name' in input_button.attrs:
                 button_name = input_button['name']
                 button_xpath = f"//input[@name='{button_name}']"
                 time.sleep(2)
                 click(driver, (By.XPATH, button_xpath))
                 time.sleep(2)
                 files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
-                
-                if files:
-                    og = os.path.join(pdf_path, files[0])
+                for f in files:
+                    og = os.path.join(pdf_path, f)
                     file_path = os.path.join(pdf_path, file_name)
                     i = 0
-                    while True:
-                        try:
-                            os.rename(og, file_path)
-                            existing_name.add(file_name)
-                            break
-                        except FileExistsError:
-                            i += 1
-                            file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
+                    while os.path.exists(file_path):
+                        i += 1
+                        file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
+                        file_path = os.path.join(pdf_path, file_name)
+                    os.rename(og, file_path)
+                    existing_name.add(file_name)
+                    
                 if files:
                     og = os.path.join(pdf_path, files[0])
                     file_path = os.path.join(pdf_path, file_name)
@@ -228,6 +225,7 @@ def etl():
     driver.close()
     driver.quit()
     print('ETL process completed!')
+
 
 if __name__ == "__main__":
     etl()
