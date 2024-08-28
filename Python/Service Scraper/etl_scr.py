@@ -214,6 +214,17 @@ def etl():
                         except FileExistsError:
                             i += 1
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
+                if files:
+                    og = os.path.join(pdf_path, files[0])
+                    file_path = os.path.join(pdf_path, file_name)
+                    i = 0
+                    while os.path.exists(file_path):
+                        i += 1
+                        file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
+                        file_path = os.path.join(pdf_path, file_name)
+                    os.rename(og, file_path)
+                    existing_name.add(file_name)
+                    
     driver.close()
     driver.quit()
     print('ETL process completed!')
