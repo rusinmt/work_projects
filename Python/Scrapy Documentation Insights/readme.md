@@ -1,7 +1,6 @@
 ## Ad Hoc Archive Mirroring Project
 
-In this notebook I am documenting the task, I have been presented with, to synchronize the local archive with the IT department's centralized archive. It identifies which files have been sent to the IT department for archiving and which ones are yet to be sent. This process involves several steps, including file 
-processing, web scraping, and data comparison, effectively creating a mirror of the centralized archive status.
+In this notebook, I am documenting the task I have been presented with, to synchronize the local archive with the IT department's centralized archive. The project identifies which files have been sent to the IT department for archiving and which ones are yet to be sent. This process involves several steps, including file processing, web scraping, and data comparison, effectively creating a mirror of the centralized archive status.
 
 The code utilizes the Scrapy tool to interact with an internal web interface. The scraper sends requests for each unique file identifier obtained from the local PDFs and extracts relevant information from the responses. This data is then saved as JSON Lines, yielding the links into a dictionary, ensuring a full, raw 
 layer of preserved data for other applications.
