@@ -2,7 +2,7 @@
 
 In this notebook, I am documenting the task to synchronize the local archive with the IT department's centralized archive. The project identifies which files have been sent to the IT department for archiving and which ones are yet to be sent. This process involves several steps, including file processing, web scraping, and data comparison, effectively creating a mirror of the centralized archive status.
 
-The code utilizes the Scrapy tool to interact with an internal web interface. The scraper sends requests for each unique file identifier obtained from the local PDFs and extracts relevant information from the responses. This data is then saved as JSON Lines, yielding the links into a dictionary, ensuring a full, raw 
+The code utilizes the Scrapy tool to interact with an internal web interface. The scraper sends requests for each unique file identifier obtained from the local PDFs and extracts relevant information from the responses. This data is then saved as JSON Lines, yielding the links into<br> a dictionary, ensuring a full, raw 
 layer of preserved data for other applications.
 The solution matches filenames processed to reflect the names of files in the on-premises directory. It then saves the findings as a CSV file, due to the large amount of data and long processing times, providing the code with a checkpoint to bounce off of, just in case. 
 
