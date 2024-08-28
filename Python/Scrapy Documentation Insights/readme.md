@@ -4,7 +4,7 @@ In this notebook, I am documenting the task to synchronize the local archive wit
 and data comparison, effectively complementing the main storage in a way that the local archive maintains only the files that still need to be sent to the central system.
 
 The code utilizes the Scrapy tool to interact with an internal web interface. The scraper sends requests for each unique file identifier obtained from the local PDFs and extracts relevant information from the responses. This data is then saved as JSON Lines, yielding the links into<br> a dictionary, ensuring a full raw 
-layer of preserved data for other applications.
+layer of preserved data for other applications.<br>
 The solution matches filenames processed to reflect the names of files in the on-premises directory. It then saves the findings as a CSV file, due to the large amount of data and long processing times, providing the code with a checkpoint to bounce off of, just in case. 
 
 The whole idea of the project was to present the IT department with a clean update of documents. With the last cell, the code drops file paths that are already present in the central archive, leaving out those that are meant to be sent.
