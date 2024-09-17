@@ -26,12 +26,8 @@ pdf_path = r"C:\Users\Mateusz\Documents\epu_arch"
 
 # Set up Chrome options
 options = Options()
-options.add_argument("--headless")
+options.add_argument("--headless=new")
 options.binary_location = chrome_path
-options.add_experimental_option("prefs", {
-    "plugins.always_open_pdf_externally": True,
-    "download.default_directory": pdf_path
-})
 
 # Initialize WebDriver
 service = Service(chromedriver_path)
@@ -87,7 +83,7 @@ def etl():
     time.sleep(3)
 
     # Set date range     
-    current_date = datetime.datetime.now() - datetime.timedelta(days=7)
+    current_date = datetime.datetime.now() - datetime.timedelta(days=14)
     week = current_date.strftime('%Y-%m-%d')
     send(driver, (By.ID, "ctl00_ContentPlaceHolder1_txtDataOd"), week)
     time.sleep(1)
@@ -107,6 +103,7 @@ def etl():
     # Extract data for each option     
     options = select_element.find_elements(By.TAG_NAME, "option")
     dfs = []
+    i = 0
     for option in options:
         option_value = option.get_attribute("value")
         Select(select_element).select_by_value(option_value)
@@ -117,21 +114,25 @@ def etl():
         select_element.send_keys(Keys.ARROW_DOWN)
         select_element.send_keys(Keys.RETURN)
         time.sleep(2)
+        xls_files = [file for file in os.listdir(pdf_path) if file.startswith("Doreczenia") and file.endswith(".xls")]
+        for ex in xls_files:
+            i +=1 
+            os.rename(os.path.join(pdf_path, ex), os.path.join(pdf_path, f'Doreczenia_{i}.xls'))
     
     # Append
     downloads_path = r"C:\Users\Mateusz\Downloads"
-    xls_files = [file for file in os.listdir(pdf_path) if file.startswith("Doreczenia") and file.endswith(".xls")]
-    append_files = sorted(xls_files, key=lambda x: os.path.getmtime(os.path.join(pdf_path, x)), reverse=True)[:len(options)]
-
+    xls_files = [file for file in os.listdir(downloads_path) if file.startswith("Doreczenia") and file.endswith(".xls")]
+    append_files = sorted(xls_files, key=lambda x: os.path.getmtime(os.path.join(downloads_path, x)), reverse=True)[:len(options)]
+    dfs = []
     for xls_file in append_files:
-        xls_file_path = os.path.join(pdf_path, xls_file)
+        xls_file_path = os.path.join(downloads_path, xls_file)
         html = pd.read_html(xls_file_path)
         df = html[0]
-        print(f'Shape of DF from file', xls_file,':', df.shape)
+        print(f'DF from file', xls_file,':', df.shape)
         df.columns = df.iloc[0]
         df = df[1:]
         dfs.append(df)
-        os.remove(xls_file_path)
+        os.remove(xls_file_path)    
 
     final_df = pd.concat(dfs, ignore_index=True)
     c1 = df.columns[0]
@@ -143,7 +144,13 @@ def etl():
     existing_files = [file for file in os.listdir(pdf_path) if file.endswith('.pdf')]
     existing_name = set(os.listdir(pdf_path))
     df = final_df.drop_duplicates(subset=['REFERENCE']).reset_index(drop=True)
-    time.sleep(1)
+
+    options = Options()
+    options.add_experimental_option("prefs", {
+    "plugins.always_open_pdf_externally": True,
+    "download.default_directory": pdf_path
+    })
+    
     driver.refresh()
     dismiss_alert()
     soup = BeautifulSoup(driver.page_source, 'html.parser')
@@ -191,40 +198,32 @@ def etl():
                 ref = ref[:-2] + "_" + ref[-2:]
             file_name = f"{ref} - {sygnatura} - {opis}.pdf"
             
-            if f'{file_name}.pdf' in existing_name:
-                continue        
-            elif input_button and 'name' in input_button.attrs:
+            if file_name in existing_name:
+                continue
+            
+            if input_button and 'name' in input_button.attrs:
                 button_name = input_button['name']
                 button_xpath = f"//input[@name='{button_name}']"
                 time.sleep(2)
                 click(driver, (By.XPATH, button_xpath))
                 time.sleep(2)
                 files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
-                for f in files:
-                    og = os.path.join(pdf_path, f)
-                    file_path = os.path.join(pdf_path, file_name)
-                    i = 0
-                    while os.path.exists(file_path):
-                        i += 1
-                        file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
-                        file_path = os.path.join(pdf_path, file_name)
-                    os.rename(og, file_path)
-                    existing_name.add(file_name)
-                    
+                
                 if files:
                     og = os.path.join(pdf_path, files[0])
                     file_path = os.path.join(pdf_path, file_name)
                     i = 0
-                    while os.path.exists(file_path):
-                        i += 1
-                        file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
-                        file_path = os.path.join(pdf_path, file_name)
-                    os.rename(og, file_path)
-                    existing_name.add(file_name)
-                    
-    driver.close()
+                    while True:
+                        try:
+                            os.rename(og, file_path)
+                            existing_name.add(file_name)
+                            break
+                        except FileExistsError:
+                            i += 1
+                            file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
     driver.quit()
-    print('ETL process completed!')
+    driver.close()
+    print('Done!')
 
 
 if __name__ == "__main__":
