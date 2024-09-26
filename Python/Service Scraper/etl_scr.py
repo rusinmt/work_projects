@@ -70,24 +70,25 @@ def get(driver):
         return sygnatura_td.get_text(strip=True)
     return None
 
-def etl():
+def delivery(driver, pdf_path):
+    
     # Login
     driver.get("https://www.e-sad.gov.pl/")
     print("Logging...")
     login(username, password)
     dismiss_alert()
-
+    
     # Extract data
     driver.get("https://www.e-sad.gov.pl/uzytkownik/mojeDoreczenia.aspx")
     dismiss_alert()
     time.sleep(3)
-
+    
     # Set date range     
-    current_date = datetime.datetime.now() - datetime.timedelta(days=14)
+    current_date = datetime.datetime.now() - datetime.timedelta(days=8)
     week = current_date.strftime('%Y-%m-%d')
     send(driver, (By.ID, "ctl00_ContentPlaceHolder1_txtDataOd"), week)
     time.sleep(1)
-    date_2_date = datetime.datetime.now() - datetime.timedelta(days=1)
+    date_2_date = datetime.datetime.now() - datetime.timedelta(days=2)
     d2d = date_2_date.strftime('%Y-%m-%d')
     send(driver, (By.ID, "ctl00_ContentPlaceHolder1_txtDataDo"), d2d)
     time.sleep(1)
@@ -133,26 +134,25 @@ def etl():
         df = df[1:]
         dfs.append(df)
         os.remove(xls_file_path)    
-
+    
     final_df = pd.concat(dfs, ignore_index=True)
     c1 = df.columns[0]
     final_df[c1] = final_df[c1].str.extract(r'V(\d+)')
     final_df = final_df.rename(columns={c1: 'REFERENCE'})
     final_df.to_csv(rf"C:\Users\Mateusz\Desktop\EPUdoreczenia_{datetime.datetime.now().strftime('%Y-%m-%d')}.csv", sep=';', encoding='cp1250', index=False)
+    df = final_df.drop_duplicates(subset=['REFERENCE']).reset_index(drop=True)  
 
-    # Download PDFs
-    existing_files = [file for file in os.listdir(pdf_path) if file.endswith('.pdf')]
-    existing_name = set(os.listdir(pdf_path))
-    df = final_df.drop_duplicates(subset=['REFERENCE']).reset_index(drop=True)
+    # Downlaod history
+    lista = r"C:\Users\Mateusz\Documents\epu_arch\hist.txt"
+    with open(lista, 'r', encoding='utf-8') as f:
+        hist = f.readlines()
 
-    options = Options()
-    options.add_experimental_option("prefs", {
-    "plugins.always_open_pdf_externally": True,
-    "download.default_directory": pdf_path
+    # New download dir
+    driver.execute_cdp_cmd('Page.setDownloadBehavior', {
+        'behavior': 'allow',
+        'downloadPath': pdf_path
     })
-    
-    driver.refresh()
-    dismiss_alert()
+            
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     span = soup.find('span', class_='form_check')
     checkbox = span.find('input', id='ctl00_ContentPlaceHolder1_chkFiltrPoDacie')
@@ -166,7 +166,7 @@ def etl():
             except ElementClickInterceptedException:
                 time.sleep(20)
                 click(driver, (By.ID, 'ctl00_ContentPlaceHolder1_chkFiltrPoDacie'))
-
+    
     for _, row in tqdm(df.iterrows(), total=len(df)):
         syg_0 = get(driver)
         ref = str(row['REFERENCE'])
@@ -178,12 +178,12 @@ def etl():
         except ElementClickInterceptedException:
             time.sleep(20)
             click(driver, (By.ID, "FiltrujButton"))
-
+    
         try:
             wait.until(lambda x: get(x) != syg_0)
         except TimeoutException:
             continue
-
+    
         soup = BeautifulSoup(driver.page_source, 'html.parser')
         rows = soup.find_all('tr', class_=['even', 'odd'])
         
@@ -197,11 +197,16 @@ def etl():
             if len(ref) > 9:
                 ref = ref[:-2] + "_" + ref[-2:]
             file_name = f"{ref} - {sygnatura} - {opis}.pdf"
-            
-            if file_name in existing_name:
+    
+            if any(file_name in f for f in hist):
+                continue
+
+            elif file_name in os.listdir(pdf_path) and not any(file_name in f for f in hist):
+                with open(lista, 'a', encoding='utf-8') as f:
+                    f.write(file_name + '\n')
                 continue
             
-            if input_button and 'name' in input_button.attrs:
+            elif input_button and 'name' in input_button.attrs:
                 button_name = input_button['name']
                 button_xpath = f"//input[@name='{button_name}']"
                 time.sleep(2)
@@ -216,15 +221,27 @@ def etl():
                     while True:
                         try:
                             os.rename(og, file_path)
-                            existing_name.add(file_name)
+                            with open(lista, 'a', encoding='utf-8') as f:
+                                f.write(file_name + '\n')
                             break
                         except FileExistsError:
                             i += 1
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
     driver.quit()
     driver.close()
-    print('Done!')
 
-
+def load(pdf_path):
+    files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf')
+    arch = r"\\m-1ztz95j\Archiwum\opisane_reference_no"             
+    for _ in files:
+        source = os.path.join(pdf_path, _)
+        dest = os.path.join(arch, _)
+        os.move(source, dest)
+             
 if __name__ == "__main__":
-    etl()
+    try:
+        delivery(driver, pdf_path)
+        load(pdf_path)
+        print(f"Ready!")
+    except WebDriverException:
+        print(f"\nRetry.\n")
