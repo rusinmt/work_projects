@@ -12,7 +12,7 @@ For addresses with an apartment number:
 
 This approach ensures a consistent and standardized format for addresses, accommodating the unique naming conventions found in some Polish cities and villages. The query capitalizes the first letter of each word in city and street names, further standardizing the output. 
 
-This effort helped to translate the hosts' database schema and transform it to meet regional requirements.
+This effort helped to translate the hosts' database schema into conventions used in Poland to meet regional requirements.
 ```sql
 SELECT
     id AS id,
