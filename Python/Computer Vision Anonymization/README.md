@@ -49,10 +49,11 @@ Example for two table sheets using [Gaussian Adaptive Threshold](https://docs.op
 ```python
 thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 ```
-<img src="https://github.com/user-attachments/assets/b584d909-79a2-4d58-8de9-f384fc349532" width="25%"> <img src="https://github.com/user-attachments/assets/76ae53dc-722c-494f-9277-27f37be51cca" width="25%"> <img src="https://github.com/user-attachments/assets/1a0ef521-c330-4f18-9527-344a2f8fc51e" width="25%">
+<img src="https://github.com/user-attachments/assets/b584d909-79a2-4d58-8de9-f384fc349532" width="35%"> <img src="https://github.com/user-attachments/assets/76ae53dc-722c-494f-9277-27f37be51cca" width="35%"> <img src="https://github.com/user-attachments/assets/1a0ef521-c330-4f18-9527-344a2f8fc51e" width="35%">
 
+*Corners* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Indexed Corners* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Pathing*
 
 ### Results
-<img src="https://github.com/user-attachments/assets/8ac90bbb-472f-4561-b813-da44305390b5" width="40%"> <img src="https://github.com/user-attachments/assets/311c51f9-eb38-4dcc-876f-dc5a6c7aad06" width="40%">
+<img src="https://github.com/user-attachments/assets/8ac90bbb-472f-4561-b813-da44305390b5" width="50%"> <img src="https://github.com/user-attachments/assets/311c51f9-eb38-4dcc-876f-dc5a6c7aad06" width="50%">
 
-*Row 3* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Row 2*
+*Row 3* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Row 2*
