@@ -1,4 +1,4 @@
-## Solution for Street names
+## Celaning The Streets
 
 This query helps to unify street naming for the established naming convention used in Poland. In cases where a household in a city doesn't have a street name, it's named by the village name and house number if it's an individual residence. Therefore, the query goes through various cases to handle different address formats:
 
