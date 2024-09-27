@@ -54,5 +54,5 @@ thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.TH
 ![Pathing](https://github.com/user-attachments/assets/1a0ef521-c330-4f18-9527-344a2f8fc51e)
 
 ### Results
-![row_3](https://github.com/user-attachments/assets/8ac90bbb-472f-4561-b813-da44305390b5) ![row_2](https://github.com/user-attachments/assets/311c51f9-eb38-4dcc-876f-dc5a6c7aad06)
+<img src="https://github.com/user-attachments/assets/8ac90bbb-472f-4561-b813-da44305390b5" width="50"> <img src="https://github.com/user-attachments/assets/311c51f9-eb38-4dcc-876f-dc5a6c7aad06" width="50">
 *Row 3* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Row 2*
