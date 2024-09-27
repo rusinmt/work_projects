@@ -9,7 +9,7 @@ options.add_experimental_option("prefs", {
 ```
 Enabling experimental options in Chrome allowed for retrieving PDF documents without the necessity of accessing multiple levels of shadow DOM in the web page code.
 
-This automated ETL process significantly streamlines extracting court delivery data and retrieving associated documents in a single execution.Output will transform collected names for the files and automatically upload them to internal archive to be accessed by users. The code skips downloading a file that is already in a specified history (hist.txt), that is a list of files procesed.
+This automated ETL process significantly streamlines the extraction of court delivery data and the retrieval of associated documents in a single execution. The output will transform the collected file names and automatically upload them to an internal archive, where they can be accessed by users. The code skips downloading any file that is already listed in a specified history file 'hist.txt', which contains a list of processed files.
 ```python
 if any(file_name in f for f in hist):
                 continue
