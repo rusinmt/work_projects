@@ -4,7 +4,7 @@ Facing a menial and time-consuming task of anonymizing a large number of rows fo
 
 The idea behind this project is to detect structures of a table, then find corners where row and column contours intersect. These corner points will act as references to connect them by a bounding line, detecting each individual row on an image or scanned document that may be skewed, rotated, and of low quality.
 
-The pipeline for detecting the table structure in the image starts by converting the input image, from a PDF page, to grayscale. I decided to use [Otsu's method](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) of binarization to avoid strict thresholding values due to the varying image quality and wide range of different pictures. Horizontal and vertical kernels and morphological opening indicate the structures that are then filtered to yield the best effect for this case scenario. The filter is used to bring out the main table structure, further exposing the desired area of the image.
+The pipeline for detecting the table structure in the image starts by converting the input image, from a PDF page, to grayscale. I decided to use [Otsu's method](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) of binarization to avoid set interval for thresholding values due to the varying image quality and wide range of different pictures. Horizontal and vertical kernels and morphological opening indicate the structures that are then filtered to yield the best effect for this case scenario. The filter is used to bring out the main table structure, further exposing the desired area of the image.
 ```python
 kernel = np.ones((5,5), np.uint8)
 dilated = cv2.dilate(filtered_lines, kernel, iterations=2)
