@@ -45,7 +45,7 @@ The code processes pages in the PDF document, saving each page in a separate fol
 
 ### Showcase
 
-Example for two table sheets using [Gaussian Adaptive Threshold](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) and const=500 to indlude smaller perimeters of contours in a table mask.
+Example of two random table sheets from a quick image search, using [Gaussian Adaptive Threshold](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) and const=500 to indlude smaller perimeters of contours in a table mask.
 ```python
 thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
 ```
