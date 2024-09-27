@@ -11,25 +11,31 @@ Enabling experimental options in Chrome allowed for retrieving PDF documents wit
 
 This automated ETL process significantly streamlines extracting court delivery data and retrieving associated documents in a single execution. The end product is a PDF files archive that will be added to the company's internal application storage and will be accessed by users. The code skips downloading a file that is already in the directory. In case of a FileExistsError, it adds a suffix of an index to downloaded files for further inspection to avoid sending duplicated data to the dedicated storage.
 ```python
-if f'{file_name}.pdf' in existing_name:
-    continue        
-elif input_button and 'name' in input_button.attrs:
-    button_name = input_button['name']
-    button_xpath = f"//input[@name='{button_name}']"
-    time.sleep(2)
-    click(driver, (By.XPATH, button_xpath))
-    time.sleep(2)
-    files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]
-    for f in files:
-        og = os.path.join(pdf_path, f)
-        file_path = os.path.join(pdf_path, file_name)
-        i = 0
-        while os.path.exists(file_path):
-            i += 1
-            file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
-            file_path = os.path.join(pdf_path, file_name)
-        
-        os.rename(og, file_path)
-        existing_name.add(file_name)
+if any(file_name in f for f in hist):
+                continue
+            elif file_name in os.listdir(pdf_path) and not any(file_name in f for f in hist):
+                with open(lista, 'a', encoding='utf-8') as f:
+                    f.write(file_name + '\n')
+                continue      
+            elif input_button and 'name' in input_button.attrs:
+                button_name = input_button['name']
+                button_xpath = f"//input[@name='{button_name}']"
+                time.sleep(2)
+                click(driver, (By.XPATH, button_xpath))
+                time.sleep(2)
+                files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf') and f.startswith('plik')]           
+                if files:
+                    og = os.path.join(pdf_path, files[0])
+                    file_path = os.path.join(pdf_path, file_name)
+                    i = 0
+                    while True:
+                        try:
+                            os.rename(og, file_path)
+                            with open(lista, 'a', encoding='utf-8') as f:
+                                f.write(file_name + '\n')
+                            break
+                        except FileExistsError:
+                            i += 1
+                            file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
 ```
 The data engineering work in this script highlights a comprehensive skill set in web automation, data extraction, and ETL pipeline design.<br> It also exhibits expertise in handling various file formats, including XLS, CSV, PDF, and HTML, showcasing the ability to work with both structured and unstructured data. The entire process is structured as an efficient ETL pipeline, indicating a solid understanding of data workflow design principles.
