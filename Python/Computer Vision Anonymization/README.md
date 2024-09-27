@@ -15,7 +15,7 @@ if contours:
     cv2.drawContours(main_structure_mask, [main_contour], -1, 255, thickness=cv2.FILLED)
 ```
 This code identifies and isolates the space of the table sheet. By dilating the lines, it connects nearby elements, making it easier to identify the overall structure. Lines that are too short, like artifacts from stamps, are removed for a clearer reading of the table structure.
-On an image made of horizontal and vertical lines that were vividly extrapolated in the last step, the code adapts the [Harris Corner Detection](https://docs.opencv.org/4.x/dc/d0d/tutorial_py_features_harris.html) algorithm to identify intersections of said lines. Centered points are used as points of reference to locate row contours and define the boundaries of the table area.
+On an image made of horizontal and vertical lines that were vividly extrapolated in the last step, the code adapts the [Harris Corner Detection](https://docs.opencv.org/4.x/dc/d0d/tutorial_py_features_harris.html) algorithm to identify intersections of said lines. CCentered points are used as references to locate row contours and define the boundaries of the table area.
 
 Diving deeper into the solution, vertical contours are sorted to establish a reliable column order by assigning corner points to columns based on their proximity to vertical lines. The added 'min_distance' parameter ensures that points that are too close to each other are not indexed. Paths connecting borders of indexed corner points create boundaries for rows. These paths are used in masking, creating separate masks for the whole table (excluding the first row of indexed corners to make the header visible) and individual rows.
 ```python
