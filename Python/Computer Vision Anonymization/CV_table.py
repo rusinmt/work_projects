@@ -9,8 +9,8 @@ from pdf2image import convert_from_path
 def process_pdf_page(image, page_number, output_folder):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
-    # Automated Thresholding using Otsu's method
-    thresh_value, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
+    # Automated Thresholding
+    thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
     
     # Extract Horizontal Lines
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (15, 1))
