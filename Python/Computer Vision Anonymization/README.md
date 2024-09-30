@@ -4,7 +4,7 @@ Facing a menial and time-consuming task of anonymizing a large number of rows fo
 
 The idea behind this project is to detect structures of a table, then find corners where row and column contours intersect. These corner points will act as references to connect them by a bounding line, detecting each individual row on an image or scanned document that may be skewed, rotated, and of low quality.
 
-The pipeline for detecting the table structure in the image starts by converting the input image, from a PDF page, to grayscale. I decided to use [Otsu's method](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) of binarization to avoid set interval for thresholding values due to the varying image quality and wide range of different pictures. Horizontal and vertical kernels and morphological opening indicate the structures that are then filtered to yield the best effect for this case scenario. The filter is used to bring out the main table structure, further exposing the desired area of the image.
+The pipeline for detecting the table structure in the image starts by converting the input image, from a PDF page, to grayscale. I decided to use [Adaptive Gaussian threshold](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) to avoid set interval for thresholding values due to the varying image quality and wide range of different pictures taken in different lightnign conditions. Horizontal and vertical kernels and morphological opening indicate the structures that are then filtered to yield the best effect for this case scenario. The filter is used to bring out the main table structure, further exposing the desired area of the image.
 ```python
 kernel = np.ones((5,5), np.uint8)
 dilated = cv2.dilate(filtered_lines, kernel, iterations=2)
@@ -45,10 +45,7 @@ The code processes pages in the PDF document, saving each page in a separate fol
 
 ### Showcase
 
-Example of two random table sheets from a quick image search, using [Gaussian Adaptive Threshold](https://docs.opencv.org/4.x/d7/d4d/tutorial_py_thresholding.html) and const=500 to include smaller perimeters of contours in a table mask.
-```python
-thresh = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV, 11, 2)
-```
+Example of two random table sheets from a quick image search, using const=500 to include smaller perimeters of contours in a table mask.
 <img src="https://github.com/user-attachments/assets/b584d909-79a2-4d58-8de9-f384fc349532" width="32%"> <img src="https://github.com/user-attachments/assets/76ae53dc-722c-494f-9277-27f37be51cca" width="32%"> <img src="https://github.com/user-attachments/assets/1a0ef521-c330-4f18-9527-344a2f8fc51e" width="32%">
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*Corners* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Indexed Corners* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *Pathing*
