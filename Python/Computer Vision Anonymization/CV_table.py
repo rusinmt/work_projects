@@ -18,7 +18,7 @@ def process_pdf_page(image, page_number, output_folder):
     
     # Find Contours for Horizontal Lines
     contours, _ = cv2.findContours(horizontal_lines, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-    const = 1850
+    const = 1200
     
     # Create Mask for Horizontal Contours Longer than 'const'
     mask_horizontal = np.zeros_like(horizontal_lines)
