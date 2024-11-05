@@ -227,8 +227,8 @@ def delivery(driver, pdf_path):
                         except FileExistsError:
                             i += 1
                             file_name = f"{ref} - {sygnatura}_{i} - {opis}.pdf"
-    driver.quit()
     driver.close()
+    driver.quit()
 
 def load(pdf_path):
     files = [f for f in os.listdir(pdf_path) if f.endswith('.pdf')
