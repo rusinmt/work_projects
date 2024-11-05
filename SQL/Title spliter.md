@@ -1,4 +1,4 @@
-The 'format_title' function developed for bank transfer automation formats transaction titles by splitting them into 35-character chunks separated by pipe characters '|', ensuring compliance with banking system requirements while maintaining readability and proper data processing in automated payment workflows.
+The 'format_title' function, developed for bank transfer automation, formats transaction titles by splitting them into 35-character chunks separated by pipe characters '|', ensuring compliance with banking system requirements while maintaining readability and proper data processing in automated payment workflows.
 ```sql
 CREATE OR REPLACE FUNCTION format_title(input_text text)
 RETURNS text AS $$
