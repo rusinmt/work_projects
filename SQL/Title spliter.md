@@ -12,7 +12,6 @@ DECLARE
     remaining text;
     chunk text;
 BEGIN
-    -- Input validation
     IF part_length <= 0 THEN
         RAISE EXCEPTION 'part_length must be > 0';
     END IF;
