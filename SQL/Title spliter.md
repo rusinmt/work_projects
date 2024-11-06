@@ -1,3 +1,6 @@
+The 'format_title' function, developed for bank transfer automation, formats transaction titles by splitting them into, user definet parts by 'part_lenght', chunks separated by chosen character like for instance '|', ensuring compliance with banking system requirements while maintaining readability and proper data processing in automated payment workflows.
+
+```sql
 CREATE OR REPLACE FUNCTION format_title(
     input_text text,
     part_length integer,
@@ -44,3 +47,4 @@ BEGIN
     RETURN result;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+```
