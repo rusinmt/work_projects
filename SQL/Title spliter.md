@@ -1,38 +1,46 @@
-The 'format_title' function, developed for bank transfer automation, formats transaction titles by splitting them into 35-character chunks separated by pipe characters '|', ensuring compliance with banking system requirements while maintaining readability and proper data processing in automated payment workflows.
-```sql
-CREATE OR REPLACE FUNCTION format_title(input_text text)
+CREATE OR REPLACE FUNCTION format_title(
+    input_text text,
+    part_length integer,
+    separator_sign text
+)
 RETURNS text AS $$
 DECLARE
-    stripped_text text;
     result text;
     remaining text;
     chunk text;
 BEGIN
-    stripped_text := trim(both '"' from input_text);
-    result := '';
-    remaining := stripped_text;
+    -- Input validation
+    IF part_length <= 0 THEN
+        RAISE EXCEPTION 'part_length must be > 0';
+    END IF;
 
-    WHILE length(remaining) > 35 LOOP
-        chunk := substring(remaining from 1 for 35);
+    IF separator_sign IS NULL THEN
+        RAISE EXCEPTION 'separator_sign cannot be null';
+    END IF;
+
+    result := '';
+    remaining := input_text;
+
+    WHILE length(remaining) > part_length LOOP
+        chunk := substring(remaining from 1 for part_length);
 
         IF result = '' THEN
             result := chunk;
         ELSE
-            result := result || '|' || chunk;
+            result := result || separator_sign || chunk;
         END IF;
 
-        remaining := substring(remaining from 36);
+        remaining := substring(remaining from part_length + 1);
     END LOOP;
 
     IF length(remaining) > 0 THEN
         IF result = '' THEN
             result := remaining;
         ELSE
-            result := result || '|' || remaining;
+            result := result || separator_sign || remaining;
         END IF;
     END IF;
 
-    RETURN '"' || result || '"';
+    RETURN result;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
-```
